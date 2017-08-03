@@ -160,12 +160,10 @@ export default class CountryPicker extends Component {
 
     if (this.props.styles) {
       Object.keys(countryPickerStyles).forEach(key => {
-        styles[key] = StyleSheet.flatten([
-          countryPickerStyles[key],
-          this.props.styles[key]
-        ])
-      })
-      styles = StyleSheet.create(styles)
+        // instead of merge, replace it
+        styles[key] = this.props.styles[key] || countryPickerStyles[key]
+      });
+      styles = StyleSheet.create(styles);
     } else {
       styles = countryPickerStyles
     }
@@ -390,6 +388,7 @@ export default class CountryPicker extends Component {
           onRequestClose={() => this.setState({ modalVisible: false })}
         >
           <SafeAreaView style={styles.modalContainer}>
+            {this.props.customHeader && this.props.customHeader(this.onClose)}
             <View style={styles.header}>
               {this.props.closeable && (
                 <CloseButton
